@@ -1,4 +1,45 @@
-<?php include('dist/config.php'); ?>
+<?php 
+// session_start();
+include('dist/config.php');
+
+if(isset($_POST['submit'])){
+	$errors = array();
+
+	if(empty($_POST['username'])){
+		$errors[] = 'Enter Username';
+	}else{
+		$username = mysqli_real_escape_string($con, $_POST['username']);
+	}
+
+	if(empty($_POST['password'])){
+		$errors[] = 'Enter Password';
+	}else{
+		$password = mysqli_real_escape_string($con, $_POST['password']);
+	}
+
+	if(empty($errors)){
+		$query = mysqli_query($con, 'SELECT * FROM users
+								WHERE username = "'.$username.'"
+								AND password = "'.$password.'"
+		') or die(mysqli_error($con));
+
+		if(mysqli_num_rows($query) == 1){
+			$result = mysqli_fetch_array($query);
+
+			// $_SESSION['email'] = $result['email'];
+			// $_SESSION['username'] = $result['username'];
+			// $_SESSION['id'] = $result['id'];
+
+			header('location:index.php');
+		}else{
+			$err_msg = "Invalid Login Details";
+
+			header("location:sign-in.php?msg=$err_msg");
+		}
+	}
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,18 +77,18 @@
 										</button>
 									</div>
 									<p>or use your email account:</p>
-									<form>
+									<form method="post" action="sign-in.php">
 										<div class="form-group">
-											<input type="email" id="inputEmail" class="form-control" placeholder="Email Address" required>
+											<input type="text" id="inputUsername" class="form-control" placeholder="Username" name="username" required>
 											<button class="btn icon"><i class="material-icons">mail_outline</i></button>
 										</div>
 										<div class="form-group">
-											<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+											<input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
 											<button class="btn icon"><i class="material-icons">lock_outline</i></button>
 										</div>
-										<button type="submit" class="btn button" formaction="index-2.html">Sign In</button>
+										<button type="submit" class="btn button" name="submit">Sign In</button>
 										<div class="callout">
-											<span>Don't have account? <a href="sign-up.html">Create Account</a></span>
+											<span>Don't have account? <a href="sign-up.php">Create Account</a></span>
 										</div>
 									</form>
 								</div>
@@ -63,7 +104,7 @@
 							<div class="preference">
 								<h2>Hello, Friend!</h2>
 								<p>Enter your personal details and start your journey with Swipe today.</p>
-								<a href="sign-up.html" class="btn button">Sign Up</a>
+								<a href="sign-up.php" class="btn button">Sign Up</a>
 							</div>
 						</div>
 					</div>

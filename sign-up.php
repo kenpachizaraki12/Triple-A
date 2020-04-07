@@ -1,4 +1,50 @@
-<?php include('dist/config.php'); ?>
+<?php include('dist/config.php'); 
+// $page_title = "Triple A.com | SIGN UP";
+
+if(isset($_POST['submit'])){
+	$errors = array();
+	if(empty($_POST['username'])){
+		$errors[] = 'Enter Username';
+	}else{
+		$username = mysqli_real_escape_string($con, $_POST['username']);
+	}
+
+	if(empty($_POST['email'])){
+		$errors[] = 'Enter Email Address';
+	}else{
+		$email = mysqli_real_escape_string($con, $_POST['email']);
+	}
+
+
+	if(empty($_POST['password'])){
+		$errors[] = 'Enter Password';
+	}
+	// elseif($_POST['repeat-pass'] != $_POST['password']){
+	// 	$errors[] ='password does not match';
+	// }
+	else{
+		$password = mysqli_real_escape_string($con, $_POST['password']);
+		// $secured_password = md5(mysqli_real_escape_string($blog, $_POST['password']));
+	}
+
+	if(empty($errors)){
+		$query = mysqli_query($con, 'INSERT INTO users
+								VALUES(NULL,
+								"'.$username.'",
+								"'.$email.'",
+								"'.$password.'")
+		') or die(mysqli_error($con));
+
+		$msg = "Registered Succesfully! Login";
+		header("location:sign-in.php?msg=$msg");
+	}else{
+		foreach($errors as $error){
+			echo "<p style=\"color:red\">$error</p>";
+		}
+	}
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,7 +82,7 @@
 										</button>
 									</div>
 									<p>or use your email for registration:</p>
-									<form class="signup">
+									<form class="signup" method="post" action="sign-up.php">
 										<div class="form-parent">
 											<div class="form-group">
 												<input type="text" id="inputName" class="form-control" placeholder="Username" name="username" required>
@@ -51,7 +97,7 @@
 											<input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
 											<button class="btn icon"><i class="material-icons">lock_outline</i></button>
 										</div>
-										<button type="submit" class="btn button" formaction="index-2.html">Sign Up</button>
+										<button type="submit" class="btn button" name="submit">Sign Up</button>
 										<div class="callout">
 											<span>Already a member? <a href="sign-in.html">Sign In</a></span>
 										</div>
@@ -69,7 +115,7 @@
 							<div class="preference">
 								<h2>Welcome Back!</h2>
 								<p>To keep connected with your friends please login with your personal info.</p>
-								<a href="sign-in.html" class="btn button">Sign In</a>
+								<a href="sign-in.php	" class="btn button">Sign In</a>
 							</div>
 						</div>
 					</div>
