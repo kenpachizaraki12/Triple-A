@@ -115,7 +115,7 @@ if(isset($_POST['submit'])){
 							<div class="preference">
 								<h2>Welcome Back!</h2>
 								<p>To keep connected with your friends please login with your personal info.</p>
-								<a href="sign-in.php	" class="btn button">Sign In</a>
+								<a href="sign-in.php" class="btn button">Sign In</a>
 							</div>
 						</div>
 					</div>
